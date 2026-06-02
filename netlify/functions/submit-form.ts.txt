@@ -28,30 +28,33 @@ const handler: Handler = async (event) => {
     const firstname = nameParts[0] || '';
     const lastname = nameParts.slice(1).join(' ') || 'No especificado';
 
-    // Crear FormData para Mantic360
-    const formData = new FormData();
-    formData.append('firstname', firstname);
-    formData.append('lastname', lastname);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('mobile', phone);
-    formData.append('company', service || 'No especificado');
-    formData.append('designation', 'Cliente Potencial');
+    // Crear URLSearchParams para Mantic360
+    const params = new URLSearchParams();
+    params.append('firstname', firstname);
+    params.append('lastname', lastname);
+    params.append('email', email);
+    params.append('phone', phone);
+    params.append('mobile', phone);
+    params.append('company', service || 'No especificado');
+    params.append('designation', 'Cliente Potencial');
     
     if (message) {
-      formData.append('description', message);
+      params.append('description', message);
     }
 
     // Tokens de Mantic360
-    formData.append('__vtrftk', 'sid:dc91084588ecd92fcc672c828cba73e357cdf31c,1780342796');
-    formData.append('publicid', '9fa3a5d787c563b345c156922f70f090');
+    params.append('__vtrftk', 'sid:dc91084588ecd92fcc672c828cba73e357cdf31c,1780342796');
+    params.append('publicid', '9fa3a5d787c563b345c156922f70f090');
 
     // Enviar a Mantic360
     const response = await fetch(
       'https://perform.mantic360-s1.net/modules/Webforms/capture.php',
       {
         method: 'POST',
-        body: formData,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
       }
     );
 
@@ -60,7 +63,7 @@ const handler: Handler = async (event) => {
     const responseText = await response.text();
     console.log('Mantic360 Response:', responseText);
 
-    // Retornar éxito (independientemente de la respuesta de Mantic360)
+    // Retornar éxito
     return {
       statusCode: 200,
       body: JSON.stringify({
