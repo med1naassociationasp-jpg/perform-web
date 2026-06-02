@@ -43,7 +43,7 @@ const handler: Handler = async (event) => {
     }
 
     // Tokens de Mantic360
-    params.append('__vtrftk', 'sid:f5541ad2ab51274779822cb017912c2d9d81a1b3,1780424564');
+    params.append('__vtrftk', 'sid:1252d0a63cd506c686e56ed1d57c17a133fbf62f,1780428904');
     params.append('publicid', 'ce69c86b1ce09c8659c1963b6472b129');
 
     // Enviar a Mantic360
